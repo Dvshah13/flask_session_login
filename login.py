@@ -1,11 +1,25 @@
 from flask import Flask, session, render_template, request, redirect
 import pg
+import os
+import sys
 
-db = pg.DB(host="localhost", user="postgres", passwd="rockets", dbname="users")
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+app = Flask(__name__)
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'this_should_be_configured')
+
+DBUSER=os.environ.get('DBUSER', True)
+DBPASS=os.environ.get('DBPASS', True)
+DBHOST=os.environ.get('DBHOST', True)
+DBNAME=os.environ.get('DBNAME', True)
+db=pg.DB(host=DBHOST, user=DBUSER, passwd=DBPASS, dbname=DBNAME)
+# db = pg.DB(host="localhost", user="postgres", passwd="rockets", dbname="users")
 db.debug = True
 
-app = Flask('MyLogin')
-app.secret_key = "asdfasdf"
+# app = Flask('MyLogin')
+# # app.secret_key = "asdfasdf"
 
 @app.route('/')
 def login():
